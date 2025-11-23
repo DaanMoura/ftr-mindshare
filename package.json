@@ -8,13 +8,16 @@
   ],
   "scripts": {
     "check": "biome check --write .",
-    "dev": "bun run --filter '*' dev",
+    "dev": "bun run src/index.ts",
     "build": "bun run --filter '*' build",
     "check-types": "bun run --filter '*' check-types",
     "dev:native": "bun run --filter native dev",
     "dev:web": "bun run --filter web dev"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@apollo/server": "^5.2.0",
+    "graphql": "^16.12.0"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0"
   },
