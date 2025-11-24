@@ -131,6 +131,9 @@
       "quoteStyle": "single",
       "attributePosition": "auto"
     },
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    },
     "globals": ["document", "navigator", "window"]
   },
   "overrides": [
