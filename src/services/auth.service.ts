@@ -1,8 +1,8 @@
 import { RegisterInput } from '../dtos/input/auth.input'
 import { prismaClient } from '../client/prisma'
 import { hashPassword } from '../utils/hash'
-import { User } from '../generated/client'
 import { signJwt } from '../utils/jwt'
+import { UserModel } from '../models/user.model'
 
 export class AuthService {
   async register(data: RegisterInput) {
@@ -27,7 +27,7 @@ export class AuthService {
     return this.generateTokens(user)
   }
 
-  generateTokens(user: User) {
+  generateTokens(user: UserModel) {
     const token = signJwt({ id: user.id, email: user.email }, '15m')
     const refreshToken = signJwt({ id: user.id, email: user.email }, '1d')
     return { token, refreshToken, user }

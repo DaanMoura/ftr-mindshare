@@ -1,13 +1,16 @@
+import 'reflect-metadata'
 import express from 'express'
 import { ApolloServer } from '@apollo/server'
-import { buildSchema } from 'graphql'
+import { buildSchema } from 'type-graphql'
 import { expressMiddleware } from '@as-integrations/express5'
+import { AuthResolver } from './resolvers/auth.resolver'
+import { UserResolver } from './resolvers/user.resolver'
 
 async function bootstrap() {
   const app = express()
 
   const schema = await buildSchema({
-    resolvers: [],
+    resolvers: [AuthResolver, UserResolver],
     validate: false,
     emitSchemaFile: 'schema.graphql'
   })
@@ -19,7 +22,7 @@ async function bootstrap() {
   app.use('/graphql', express.json(), expressMiddleware(server))
 
   app.listen({ port: 4000 }, () => {
-    console.log(`🚀 Server ready at http://localhost:4000/graphql`)
+    console.log(`🚀 Server ready at http://localhost:4000`)
   })
 }
 
