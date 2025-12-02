@@ -1,10 +1,26 @@
-import { RegisterInput } from '../dtos/input/auth.input'
+import { LoginInput, RegisterInput } from '../dtos/input/auth.input'
 import { prismaClient } from '../client/prisma'
-import { hashPassword } from '../utils/hash'
+import { comparePasswords, hashPassword } from '../utils/hash'
 import { signJwt } from '../utils/jwt'
 import { UserModel } from '../models/user.model'
 
 export class AuthService {
+  async login(data: LoginInput) {
+    const existingUser = await prismaClient.user.findUnique({
+      where: {
+        email: data.email
+      }
+    })
+
+    if (!existingUser) throw new Error('User not registered')
+
+    const compare = await comparePasswords(data.password, existingUser.password)
+
+    if (!compare) throw new Error('Invalid password')
+
+    return this.generateTokens(existingUser)
+  }
+
   async register(data: RegisterInput) {
     const existingUser = await prismaClient.user.findUnique({
       where: {
