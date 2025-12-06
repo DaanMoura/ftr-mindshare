@@ -7,12 +7,15 @@ import { CreateIdeaInput, ListIdeasInput, UpdateIdeaInput } from '../dtos/input/
 import { GqlUser } from '../graphql/decorators/user.decorator'
 import { User } from '@prisma/client'
 import { UserModel } from '../models/user.model'
+import { CommentModel } from '../models/comment.model'
+import { CommentService } from '../services/comment.service'
 
 @Resolver(() => IdeaModel)
 @UseMiddleware(IsAuth)
 export class IdeaResolver {
   private ideaService = new IdeaService()
   private userService = new UserService()
+  private commentService = new CommentService()
 
   @Mutation(() => IdeaModel)
   async createIdea(
@@ -46,5 +49,10 @@ export class IdeaResolver {
   @FieldResolver(() => UserModel)
   async author(@Root() idea: IdeaModel): Promise<UserModel> {
     return this.userService.findUser(idea.authorId)
+  }
+
+  @FieldResolver(() => [CommentModel])
+  async comments(@Root() idea: IdeaModel): Promise<CommentModel[]> {
+    return this.commentService.listByIdea(idea.id)
   }
 }

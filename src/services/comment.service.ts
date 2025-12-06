@@ -36,4 +36,18 @@ export class CommentService {
 
     return prismaClient.comment.delete({ where: { id } })
   }
+
+  async listByIdea(ideaId: string) {
+    const findIdea = await prismaClient.idea.findUnique({
+      where: {
+        id: ideaId
+      }
+    })
+
+    if (!findIdea) {
+      throw new Error('Idea not found')
+    }
+
+    return prismaClient.comment.findMany({ where: { ideaId } })
+  }
 }
