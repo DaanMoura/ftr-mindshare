@@ -1,18 +1,22 @@
 import { Field, GraphQLISODateTime, ID, ObjectType } from 'type-graphql'
+import { UserModel } from './user.model'
 
 @ObjectType()
-export class UserModel {
+export class IdeaModel {
   @Field(() => ID)
   id!: string
 
   @Field(() => String)
-  name!: string
-
-  @Field(() => String)
-  email!: string
+  title!: string
 
   @Field(() => String, { nullable: true })
-  password?: string | null
+  description!: string | null
+
+  @Field(() => String)
+  authorId!: string
+
+  @Field(() => UserModel, { nullable: true })
+  author?: UserModel
 
   @Field(() => GraphQLISODateTime)
   createdAt!: Date

@@ -3,10 +3,49 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CommentModel {
+  author: UserModel
+  authorId: String!
+  content: String!
+  createdAt: DateTimeISO!
+  id: ID!
+  idea: IdeaModel
+  ideaId: String!
+  updatedAt: DateTimeISO!
+}
+
+input CreateCommentInput {
+  content: String!
+}
+
+input CreateIdeaInput {
+  description: String
+  title: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
 scalar DateTimeISO
+
+type IdeaModel {
+  author: UserModel
+  authorId: String!
+  createdAt: DateTimeISO!
+  description: String
+  id: ID!
+  title: String!
+  updatedAt: DateTimeISO!
+}
+
+input ListIdeasInput {
+  userId: String
+}
 
 input LoginInput {
   email: String!
@@ -20,12 +59,19 @@ type LoginOutput {
 }
 
 type Mutation {
+  createComment(data: CreateCommentInput!, ideaId: String!): CommentModel!
+  createIdea(data: CreateIdeaInput!): IdeaModel!
+  createUser(data: CreateUserInput!): UserModel!
+  deleteComment(id: String!): Boolean!
+  deleteIdea(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!
+  updateIdea(data: UpdateIdeaInput!, id: String!): IdeaModel!
 }
 
 type Query {
   getUser(id: String!): UserModel!
+  listIdeas(data: ListIdeasInput): [IdeaModel!]!
 }
 
 input RegisterInput {
@@ -40,11 +86,16 @@ type RegisterOutput {
   user: UserModel!
 }
 
+input UpdateIdeaInput {
+  description: String
+  title: String
+}
+
 type UserModel {
   createdAt: DateTimeISO!
   email: String!
   id: ID!
   name: String!
-  password: String!
+  password: String
   updatedAt: DateTimeISO!
 }
