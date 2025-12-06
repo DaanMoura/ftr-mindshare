@@ -37,7 +37,7 @@ export class CommentService {
     return prismaClient.comment.delete({ where: { id } })
   }
 
-  async listByIdea(ideaId: string) {
+  async listCommentsByIdea(ideaId: string) {
     const findIdea = await prismaClient.idea.findUnique({
       where: {
         id: ideaId
